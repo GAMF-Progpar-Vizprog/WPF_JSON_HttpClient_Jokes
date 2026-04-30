@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_Jokes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Jokes" Height="450" Width="800">
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
@@ -18,12 +18,12 @@
                 Margin="10" 
                 HorizontalAlignment="Left"/>
 
-			<ListBox x:Name="JokeListBox" 
+			<ListBox x:Name="lbJokeListBox" 
                  Grid.Row="1" 
                  Margin="10" 
                  VerticalContentAlignment="Top"/>
 
-			<TextBlock x:Name="StatusText" 
+			<TextBlock x:Name="tbStatusText" 
                    Grid.Row="2" 
                    Margin="10" 
                    Foreground="DarkGreen" 

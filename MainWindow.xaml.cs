@@ -1,18 +1,16 @@
-﻿using System.Net.Http; // HttpClient osztályt tartalmazza, amellyel HTTP kéréseket lehet indítani
-using System.Text.Json; // JSON szerializálás és deszerializálás támogatása
-using System.Windows;   // WPF alapvető osztályai, például Window, RoutedEventArgs stb.
+﻿using System.Net.Http; 
+using System.Text.Json; 
+using System.Windows;   
 
 namespace WPF_Jokes
 {
-	// A MainWindow osztály egy WPF ablak, amely tartalmazza a felhasználói felületet
 	public partial class MainWindow : Window
 	{
-		// Egy statikus HttpClient példány, amelyet az API hívásokhoz használunk
-		// readonly: nem lehet újra értéket adni az objektum példányon belül
+		// Egy HttpClient példány, amelyet az API hívásokhoz használunk
 		private readonly HttpClient cl = new();
 
 		// Egy lista, amely a letöltött vicceket fogja tárolni (Joke típusú objektumokból áll)
-		private List<Joke> JokeList = new List<Joke>();
+		private List<Joke?> JokeList = [];
 
 		// Az ablak konstruktora, ahol inicializálódik a felhasználói felület
 		public MainWindow()
@@ -23,68 +21,65 @@ namespace WPF_Jokes
 		// Eseménykezelő: amikor a felhasználó rákattint a "Fetch" gombra
 		private async void FetchAndSaveJokes_Click(object sender, RoutedEventArgs e)
 		{
-			// Frissíti a státusz szöveget a felhasználói felületen
-			StatusText.Text = "Fetching jokes...";
-
-			// Törli a ListBox tartalmát (ahol a viccek jelennek meg)
-			JokeListBox.Items.Clear();
-
-			// Törli a JokeList tartalmát (a program belső listája)
+			// Frissítjük a státusz szöveget a felhasználói felületen
+			tbStatusText.Text = "Fetching jokes...";
+			// Töröljük a ListBox tartalmát (ahol a viccek jelennek meg)
+			lbJokeListBox.Items.Clear();
+			// Töröljük a JokeList tartalmát (a program belső listája)
 			JokeList.Clear();
-
 			try
 			{
-				// 10 vicc lekérése egy ciklusban
+				// Lekérünk 10 viccet	egy ciklusban
 				for (int i = 0; i < 10; i++)
 				{
-					// A FetchJokeAsync metódus meghívása, amely egy viccet kér le az API-ról
+					// Meghívjuk a FetchJokeAsync metódust, ami egy viccet kér le az API-ról
 					var joke = await FetchJokeAsync();
 
 					// Ha a vicc sikeresen le lett kérve (nem null)
 					if (joke != null)
 					{
-						// Hozzáadjuk a viccet a belső listához
+						// Hozzáadjuk a viccet a listához
 						JokeList.Add(joke);
 
 						// Megjelenítjük a vicc "setup" és "punchline" részét a ListBox-ban
-						JokeListBox.Items.Add($"{joke.setup} — {joke.punchline}");
+						lbJokeListBox.Items.Add($"{joke.setup} — {joke.punchline}");
 					}
 				}
 
-				// Elmenti a vicceket JSON formátumba egy fájlba
+				// Elmentjük a vicceket JSON formátumba egy fájlba
 				await SaveJokesToJsonAsync();
 
-				// Sikeres végrehajtás esetén frissíti a státusz szöveget
-				StatusText.Text = $"✅ Successfully fetched and saved {JokeList.Count} jokes to 'jokes.json'";
+				// Sikeres végrehajtás esetén frissítjük a státusz szöveget
+				tbStatusText.Text = $"Successfully fetched and saved {JokeList.Count} jokes to 'jokes.json'";
 			}
 			catch (Exception ex) // Ha bármilyen hiba történik
 			{
-				// A hibaüzenetet megjeleníti a státusz mezőben
-				StatusText.Text = $"❌ Error: {ex.Message}";
+				// Megjelenítjük a hibaüzenetet	a státusz mezőben
+				tbStatusText.Text = $"Error: {ex.Message}";
 			}
 		}
 
 		// Aszinkron metódus, amely egy viccet kér le az API-ról
-		private async Task<Joke> FetchJokeAsync()
+		private async Task<Joke?> FetchJokeAsync()
 		{
 			try
 			{
 				// Az API elérési címe 
 				string url = "https://official-joke-api.appspot.com/jokes/random";
 
-				// HTTP GET kérés indítása
+				// Indítjuk a HTTP GET kérést
 				var response = await cl.GetAsync(url);
 
-				// Ellenőrzi, hogy a válasz sikeres volt-e (pl. 200 OK)
+				// Ellenőizzük, hogy a válasz sikeres volt-e (pl. 200 OK)
 				response.EnsureSuccessStatusCode();
 
-				// A válasz törzsének beolvasása szövegként
+				// Beolvaszuk a válasz törzsét szövegként (ez JSON formátumú lesz)
 				var json = await response.Content.ReadAsStringAsync();
 
 				// A JSON szöveg deszerializálása Joke objektummá
 				Joke? res = JsonSerializer.Deserialize<Joke>(json);
 
-				// Visszatér a vicc objektummal
+				// Visszatérünk a vicc objektummal
 				return res;
 			}
 			catch // Általános hibakezelés: ha bármi hiba történik, null-t ad vissza
@@ -110,7 +105,7 @@ namespace WPF_Jokes
 		}
 	}
 
-	// A Joke osztály definiálása – ez fogja reprezentálni a vicc objektumot
+	// A Joke osztály – ez ír le egy vicc objektumot
 	public class Joke
 	{
 		// A vicc típusa (pl. "general", "programming")
