@@ -4,9 +4,9 @@ Egy WPF alkalmazás, amely véletlenszerű vicceket tölt le egy nyilvános API-
 
 ## Funkciók
 
-- 10 véletlenszerű vicc lekérése egy nyilvános REST API-ról
+- 5 véletlenszerű vicc lekérése a `https://official-joke-api.appspot.com/jokes/random` végpontról
 - A viccek megjelenítése egy listában (bevezetés — poén formátumban)
-- A letöltött viccek mentése `jokes.json` fájlba
+- A letöltött viccek mentése egy JSON fájlba aszinkron módon
 - Aszinkron hálózati kommunikáció: a felhasználói felület a letöltés közben is válaszkész marad
 - Állapotjelző szöveg (pl. „Fetching jokes..." vagy sikeres/hibaüzenet)
 
@@ -14,7 +14,7 @@ Egy WPF alkalmazás, amely véletlenszerű vicceket tölt le egy nyilvános API-
 
 | Technológia | Leírás |
 |---|---|
-| .NET | Futtatókörnyezet |
+| .NET 10 | Futtatókörnyezet |
 | WPF (Windows Presentation Foundation) | Felhasználói felület |
 | `HttpClient` | HTTP GET kérések küldése |
 | `System.Text.Json` | JSON sorosítás és deszerializálás |
@@ -22,26 +22,11 @@ Egy WPF alkalmazás, amely véletlenszerű vicceket tölt le egy nyilvános API-
 
 ## Az alkalmazás felépítése
 
-### Felhasználói felület (`MainWindow.xaml`)
-
-Az ablak három fő elemből áll:
-
-1. **„Fetch and Save 10 Jokes" gomb** – a lekérés indítása
-2. **ListBox** – a letöltött viccek listás megjelenítése
-3. **Állapotjelző szöveg** – visszajelzés a művelet állásáról (zöld szöveg)
-
-### Programlogika (`MainWindow.xaml.cs`)
-
-#### `FetchAndSaveJokes_Click`
-A gombra kattintáskor lefutó eseménykezelő. Törli az előző eredményeket, majd egy ciklusban 10-szer meghívja a `FetchJokeAsync()` metódust. Sikeres letöltés után meghívja a `SaveJokesToJsonAsync()` metódust, és frissíti az állapotjelzőt.
-
 #### `FetchJokeAsync`
 Aszinkron metódus, amely egyetlen viccet kér le az alábbi API végpontról:
-
 ```
 GET https://official-joke-api.appspot.com/jokes/random
 ```
-
 A kapott JSON választ `Joke` objektummá alakítja. Hiba esetén `null`-t ad vissza.
 
 #### `SaveJokesToJsonAsync`
@@ -61,7 +46,7 @@ public class Joke
 
 ## Kimenet
 
-A program futása után létrejön egy `jokes.json` fájl az alkalmazás könyvtárában, például:
+A program futása után létrejön egy JSON fájl az alkalmazás könyvtárában, például:
 
 ```json
 [

@@ -12,21 +12,17 @@
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
-
-			<Button Content="Fetch and Save 10 Jokes" 
-                Click="FetchAndSaveJokes_Click" 
-                Margin="10" 
-                HorizontalAlignment="Left"/>
-
-			<ListBox x:Name="lbJokeListBox" 
-                 Grid.Row="1" 
-                 Margin="10" 
-                 VerticalContentAlignment="Top"/>
-
+			<Menu>
+				<MenuItem Header="Fetch 5 Jokes" 
+                Click="miFetchJokes_Click" />
+				<MenuItem Header="Save Jokes" 
+								Click="miSaveJokes_Click" />
+			</Menu>
+		<TextBox x:Name="tbJokes" 
+                Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+						    AcceptsReturn="True" IsReadOnly="True"/>
 			<TextBlock x:Name="tbStatusText" 
-                   Grid.Row="2" 
-                   Margin="10" 
-                   Foreground="DarkGreen" 
-                   TextWrapping="Wrap"/>
+                Grid.Row="2" Margin="5" 
+                Foreground="DarkGreen" TextWrapping="Wrap"/>
 		</Grid>
 	</Window>
