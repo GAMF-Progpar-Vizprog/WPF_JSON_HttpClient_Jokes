@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace WPF_Jokes
+namespace WPF_JSON_HttpClient_Jokes
 {
     /// <summary>
     /// Interaction logic for App.xaml

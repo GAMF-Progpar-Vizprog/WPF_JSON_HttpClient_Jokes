@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text.Json;
 using System.Windows;
-namespace WPF_Jokes
+namespace WPF_JSON_HttpClient_Jokes
 {
 	public partial class MainWindow : Window
 	{
